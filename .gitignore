@@ -30,3 +30,6 @@ node_modules
 
 # OSX
 .DS_Store
+
+# Transpiled version
+src/index.transpiled.js
