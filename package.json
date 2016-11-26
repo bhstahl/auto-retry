@@ -1,0 +1,44 @@
+{
+  "name": "auto-retry",
+  "version": "1.0.0",
+  "description": "Exponentially retry any promise returning function when it fails, automatically",
+  "main": "index.js",
+  "scripts": {
+    "pretest": "npm run lint",
+    "test": "nyc ava",
+    "lint": "eslint --format=node_modules/eslint-formatter-pretty src test",
+    "coverage": "npm test && nyc report --reporter=text-lcov | coveralls"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/bhstahl/auto-retry.git"
+  },
+  "keywords": [
+    "exponential",
+    "retry"
+  ],
+  "author": "Ben Stahl <bhstahl@gmail.com>",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/bhstahl/auto-retry/issues"
+  },
+  "homepage": "https://github.com/bhstahl/auto-retry#readme",
+  "devDependencies": {
+    "@vimeo/eslint-config-player": "^4.0.1",
+    "ava": "^0.17.0",
+    "babel-core": "^6.18.2",
+    "babel-preset-es2015": "^6.18.0",
+    "coveralls": "^2.11.15",
+    "eslint": "^3.11.0",
+    "eslint-formatter-pretty": "^1.1.0",
+    "nyc": "^10.0.0"
+  },
+  "ava": {
+    "files": [
+      "test/*.js"
+    ],
+    "require": [
+      "babel-register"
+    ]
+  }
+}
