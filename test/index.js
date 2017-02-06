@@ -1,20 +1,6 @@
 import test from 'ava';
 import autoRetry from '../src/index';
 
-test('autoRetry retries on rejection', (t) => {
-    let timesFunctionWasCalled = 0;
-    const rejectedFunction = () => {
-        timesFunctionWasCalled++;
-        return Promise.reject('failed');
-    };
-
-    const rejectedFunctionWithRetry = autoRetry(rejectedFunction, 1);
-    return rejectedFunctionWithRetry().catch((result) => {
-        t.true(result === 'failed');
-        t.true(timesFunctionWasCalled === 2);
-    });
-});
-
 test('autoRetry resolves successfully', (t) => {
     let timesFunctionWasCalled = 0;
     const resolvedFunction = () => {
@@ -22,7 +8,7 @@ test('autoRetry resolves successfully', (t) => {
         return Promise.resolve('success');
     };
 
-    const resolvedFunctionWithRetry = autoRetry(resolvedFunction, 1);
+    const resolvedFunctionWithRetry = autoRetry(resolvedFunction);
     return resolvedFunctionWithRetry().then((result) => {
         t.true(result === 'success');
         t.true(timesFunctionWasCalled === 1);
@@ -30,14 +16,32 @@ test('autoRetry resolves successfully', (t) => {
     });
 });
 
-test('autoRetry responds to default parameters', (t) => {
+test('autoRetry resolves successfully after rejection', (t) => {
     let timesFunctionWasCalled = 0;
-    const rejectedFunction = () => {
+    const resolvedFunction = () => {
+        timesFunctionWasCalled++;
+        if (timesFunctionWasCalled < 2) {
+            return Promise.reject('failed');
+        }
+        return Promise.resolve('success');
+    };
+
+    const resolvedFunctionWithRetry = autoRetry(resolvedFunction);
+    return resolvedFunctionWithRetry().then((result) => {
+        t.true(result === 'success');
+        t.true(timesFunctionWasCalled === 2);
+        return;
+    }).catch(console.warn);
+});
+
+test('autoRetry rejects eventually', (t) => {
+    let timesFunctionWasCalled = 0;
+    const resolvedFunction = () => {
         timesFunctionWasCalled++;
         return Promise.reject('failed');
     };
 
-    const resolvedFunctionWithRetry = autoRetry(rejectedFunction);
+    const resolvedFunctionWithRetry = autoRetry(resolvedFunction);
     return resolvedFunctionWithRetry().catch((result) => {
         t.true(result === 'failed');
         t.true(timesFunctionWasCalled === 3);
@@ -45,14 +49,16 @@ test('autoRetry responds to default parameters', (t) => {
     });
 });
 
-test('autoRetry responds to custom parmeters', (t) => {
+
+test('autoRetry responds to custom options', (t) => {
     let timesFunctionWasCalled = 0;
     const rejectedFunction = () => {
         timesFunctionWasCalled++;
         return Promise.reject('failed');
     };
 
-    const rejectedFunctionWithRetry = autoRetry(rejectedFunction, 3, 2);
+    const options = { maxRetries: 1, logRetries: true, backoffBase: 50 };
+    const rejectedFunctionWithRetry = autoRetry(rejectedFunction, options);
     return rejectedFunctionWithRetry().catch((result) => {
         t.true(result === 'failed');
         t.true(timesFunctionWasCalled === 2);
