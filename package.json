@@ -1,6 +1,6 @@
 {
   "name": "auto-retry",
-  "version": "0.0.1",
+  "version": "1.0.0",
   "description": "Exponentially retry any promise returning function when it fails, automatically",
   "main": "src/index.transpiled.js",
   "module": "src/index.js",
