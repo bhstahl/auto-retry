@@ -57,7 +57,7 @@ test('autoRetry responds to custom options', (t) => {
         return Promise.reject('failed');
     };
 
-    const options = { maxRetries: 1 };
+    const options = { maxRetries: 1, logRetries: true, backoffBase: 50 };
     const rejectedFunctionWithRetry = autoRetry(rejectedFunction, options);
     return rejectedFunctionWithRetry().catch((result) => {
         t.true(result === 'failed');

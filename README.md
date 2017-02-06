@@ -39,15 +39,16 @@ requestWithRetry('http://www.vimeo.com')
 
 #### autoRetry(fn, options) ⇒ <code>function</code>
 Higher order function that makes any promise-returning-function
-retryable with a jittr'd exponential backoff.
+retryable with a jitter'd exponential backoff.
 
 | Param | Type | Description |
 | --- | --- | --- |
 | fn | <code>function</code> | Function to be made retryable. |
 | options | <code>Object</code> | Configuration. |
+| options.backoffBase | <code>Number</code> | Base interval for backoff wait time (in ms). |
+| options.logRetries | <code>Boolen</code> | Log retry attempts to the console. |
 | options.maxRetries | <code>Number</code> | Total number of retries. |
 | options.retryCount | <code>Number</code> | Current retry count. |
-| options.backoffBase | <code>Number</code> | Base interval for backoff wait time (in ms). |
 
 
 ```js
