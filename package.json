@@ -7,10 +7,10 @@
   "jsnext:main": "src/index.js",
   "scripts": {
     "pretest": "npm run lint",
-    "test": "nyc ava",
+    "test": "nyc --reporter=html --reporter=text ava",
     "build": "babel src/index.js --out-file src/index.transpiled.js",
     "lint": "eslint --format=node_modules/eslint-formatter-pretty src test",
-    "coverage": "npm test && nyc report --reporter=text-lcov | coveralls",
+    "coverage": "nyc report --reporter=text-lcov | coveralls",
     "prepublish": "npm run lint && npm test && npm run build"
   },
   "repository": {
@@ -29,14 +29,14 @@
   "homepage": "https://github.com/bhstahl/auto-retry#readme",
   "devDependencies": {
     "@vimeo/eslint-config-player": "^4.0.1",
-    "ava": "^0.17.0",
+    "ava": "^0.18.2",
     "babel-cli": "^6.24.0",
     "babel-plugin-transform-object-rest-spread": "^6.23.0",
     "babel-preset-env": "^1.2.1",
-    "coveralls": "^2.11.15",
+    "coveralls": "^2.12.0",
     "eslint": "^3.11.0",
     "eslint-formatter-pretty": "^1.1.0",
-    "nyc": "^10.0.0"
+    "nyc": "^10.1.2"
   },
   "ava": {
     "files": [
