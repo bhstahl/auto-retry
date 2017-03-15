@@ -1,0 +1,7 @@
+.babelrc
+.eslintignore
+.eslintrc.json
+.nyc_output
+.travis.yml
+coverage
+test

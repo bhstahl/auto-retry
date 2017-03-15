@@ -5,6 +5,11 @@
   "main": "src/index.transpiled.js",
   "module": "src/index.js",
   "jsnext:main": "src/index.js",
+  "files": [
+    "LICENSE",
+    "README.md",
+    "src/"
+  ],
   "scripts": {
     "pretest": "npm run lint",
     "test": "nyc --reporter=html --reporter=text ava",
