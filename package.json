@@ -5,10 +5,12 @@
   "main": "src/index.transpiled.js",
   "module": "src/index.js",
   "jsnext:main": "src/index.js",
+  "typings": "index.d.ts",
   "files": [
     "LICENSE",
     "README.md",
-    "src/"
+    "src/",
+    "index.d.ts"
   ],
   "scripts": {
     "pretest": "npm run lint",

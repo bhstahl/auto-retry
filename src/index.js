@@ -19,6 +19,17 @@ export default function retryFunctionOnReject(fn, options) {
     };
 
     options = Object.assign(DEFAULTS, options);
+
+    if (options.logRetries === true) {
+        options.logRetries = (retryCount, delay) =>
+          `[auto-retry] ${fn.name || 'function'} was rejected. ` +
+          `Retrying #${retryCount} after ${delay}ms.`;
+    }
+    else if (typeof options.logRetries === 'string') {
+        const logString = options.logRetries;
+        options.logRetries = () => logString;
+    }
+
     return (...args) => {
         return new Promise((resolve, reject) => {
             fn(...args)
@@ -36,7 +47,11 @@ export default function retryFunctionOnReject(fn, options) {
                 const delay = jitter + backoff;
 
                 if (options.logRetries) {
-                    console.log(`[auto-retry] ${fn.name || 'function'} was rejected. Retrying #${options.retryCount} after ${delay}ms.`);
+                    const logString = options.logRetries(options.retryCount, delay);
+
+                    if (logString) {
+                        console.log(logString);
+                    }
                 }
 
                 const nextFn = retryFunctionOnReject(fn, options);
