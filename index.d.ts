@@ -1,9 +1,9 @@
 export interface RetryOptions {
   backoffBase?: number;
-  logRetries?: boolean | string |
-               ((retryCount: number, delay: number) => string | void);
+  logRetries?: boolean;
   maxRetries?: number;
   retryCount?: number;
+  onRetry?(retryCount: number, delay: number): void;
 }
 
 export default function retryFunctionOnReject<F extends (...args: any[]) => Promise<any>>(

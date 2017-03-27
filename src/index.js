@@ -8,6 +8,7 @@
  * @param  {Boolean}  options.logRetries    Log retry attempts to the console.
  * @param  {Number}   options.maxRetries    Total number of retries.
  * @param  {Number}   options.retryCount    Current retry count.
+ * @param  {Function} options.onRetry       Function to be called after each failed attempt.
  * @return {Function}
  */
 export default function retryFunctionOnReject(fn, options) {
@@ -19,17 +20,6 @@ export default function retryFunctionOnReject(fn, options) {
     };
 
     options = Object.assign(DEFAULTS, options);
-
-    if (options.logRetries === true) {
-        options.logRetries = (retryCount, delay) =>
-          `[auto-retry] ${fn.name || 'function'} was rejected. ` +
-          `Retrying #${retryCount} after ${delay}ms.`;
-    }
-    else if (typeof options.logRetries === 'string') {
-        const logString = options.logRetries;
-        options.logRetries = () => logString;
-    }
-
     return (...args) => {
         return new Promise((resolve, reject) => {
             fn(...args)
@@ -47,11 +37,11 @@ export default function retryFunctionOnReject(fn, options) {
                 const delay = jitter + backoff;
 
                 if (options.logRetries) {
-                    const logString = options.logRetries(options.retryCount, delay);
+                    console.log(`[auto-retry] ${fn.name || 'function'} was rejected. Retrying #${options.retryCount} after ${delay}ms.`);
+                }
 
-                    if (logString) {
-                        console.log(logString);
-                    }
+                if (options.onRetry) {
+                    options.onRetry(options.retryCount, delay);
                 }
 
                 const nextFn = retryFunctionOnReject(fn, options);

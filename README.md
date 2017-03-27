@@ -49,6 +49,7 @@ retryable with a jitter'd exponential backoff.
 | options.logRetries | <code>Boolen</code> | Log retry attempts to the console. |
 | options.maxRetries | <code>Number</code> | Total number of retries. |
 | options.retryCount | <code>Number</code> | Current retry count. |
+| options.onRetry | <code>function</code> | Function to be called after each failed attempt. |
 
 
 ```js
