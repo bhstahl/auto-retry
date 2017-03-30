@@ -64,3 +64,43 @@ test('autoRetry responds to custom options', (t) => {
         t.true(timesFunctionWasCalled === 2);
     });
 });
+
+test.serial('autoRetry logs default message', (t) => {
+    const origLog = console.log;
+
+    let logMessage;
+
+    console.log = (message) => {
+        logMessage = message;
+    };
+
+    const options = { maxRetries: 1, logRetries: true, backoffBase: 50 };
+    const rejectedFunction = () => Promise.reject('failed');
+    const rejectedFunctionWithRetry = autoRetry(rejectedFunction, options);
+    return rejectedFunctionWithRetry().catch(() => {
+        t.regex(logMessage, /^\[auto-retry] rejectedFunction was rejected\. Retrying #1 after \d+ms\.$/);
+    }).then(() => {
+        console.log = origLog;
+        return undefined;
+    });
+});
+
+test('autoRetry calls onRetry callback', (t) => {
+    let timesFunctionWasCalled = 0;
+    let callbackRetryCount;
+    let callbackDelay;
+    const onRetry = (retryCount, delay) => {
+        timesFunctionWasCalled++;
+        callbackRetryCount = retryCount;
+        callbackDelay = delay;
+    };
+
+    const options = { maxRetries: 1, backoffBase: 50, onRetry };
+    const rejectedFunction = () => Promise.reject('failed');
+    const rejectedFunctionWithRetry = autoRetry(rejectedFunction, options);
+    return rejectedFunctionWithRetry().catch(() => {
+        t.true(timesFunctionWasCalled === 1);
+        t.true(callbackRetryCount === 1);
+        t.true(typeof callbackDelay === 'number');
+    });
+});

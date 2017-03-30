@@ -8,6 +8,7 @@
  * @param  {Boolean}  options.logRetries    Log retry attempts to the console.
  * @param  {Number}   options.maxRetries    Total number of retries.
  * @param  {Number}   options.retryCount    Current retry count.
+ * @param  {Function} options.onRetry       Function to be called after each failed attempt.
  * @return {Function}
  */
 export default function retryFunctionOnReject(fn, options) {
@@ -37,6 +38,10 @@ export default function retryFunctionOnReject(fn, options) {
 
                 if (options.logRetries) {
                     console.log(`[auto-retry] ${fn.name || 'function'} was rejected. Retrying #${options.retryCount} after ${delay}ms.`);
+                }
+
+                if (options.onRetry) {
+                    options.onRetry(options.retryCount, delay);
                 }
 
                 const nextFn = retryFunctionOnReject(fn, options);
