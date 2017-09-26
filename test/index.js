@@ -78,7 +78,7 @@ test.serial('autoRetry logs default message', (t) => {
     const rejectedFunction = () => Promise.reject('failed');
     const rejectedFunctionWithRetry = autoRetry(rejectedFunction, options);
     return rejectedFunctionWithRetry().catch(() => {
-        t.regex(logMessage, /^\[auto-retry] rejectedFunction was rejected\. Retrying #1 after \d+ms\.$/);
+        t.regex(logMessage, /^\[auto-retry] function was rejected\. Retrying #1 after \d+ms\.$/);
     }).then(() => {
         console.log = origLog;
         return undefined;
