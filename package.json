@@ -3,8 +3,6 @@
   "version": "1.0.1",
   "description": "Exponentially retry any promise returning function when it fails, automatically",
   "main": "src/index.transpiled.js",
-  "module": "src/index.js",
-  "jsnext:main": "src/index.js",
   "typings": "index.d.ts",
   "files": [
     "LICENSE",
